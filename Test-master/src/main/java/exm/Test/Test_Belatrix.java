@@ -3,6 +3,12 @@ package exm.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+
+import javax.swing.text.View;
+
 import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
@@ -157,9 +163,37 @@ public class Test_Belatrix {
 		System.out.println("Nombre 4: "+nombre4);
 		System.out.println("Nombre 5: "+nombre5);
 		
-		
-		
+		ArrayList<String> stud = new ArrayList<>();
+        ArrayList<Double> uspe = new ArrayList<>();
+        stud.add(nombre1);
+        stud.add(nombre2);
+        stud.add(nombre3);
+        stud.add(nombre4);
+        stud.add(nombre5);
+        uspe.add(4.5);
+        uspe.add(6.3);
+        uspe.add(3.8);
+        uspe.add(5.5);
+        uspe.add(4.7);
+
+        Collections.sort(stud);
+        for(String temp: stud){
+            System.out.println(temp);
+        }		
 	}
+	
+	private static ArrayList<String> sortA(ArrayList<String> st, ArrayList<Double> us) {
+        ArrayList<String> list = new ArrayList<>();
+        String s;
+        for (int i = 0; i < st.size(); i++) {
+            s = st.get(i) + ": " + us.get(i);
+            list.add(s);
+        }
+        HashSet<String> set = new HashSet<>(list);
+        list.clear();
+        list.addAll(set);
+        return list;
+    }
 	
 	public void Cerrar_Pagina() {
 		try {
