@@ -47,7 +47,7 @@ public class Test_Belatrix_Run {
 					Test.busqueda(datos[i][0].toString(), datos[i][1].toString() );
 					Test.leerPrecios();
 					Test.assertPrecios();
-					Test.imprimirProductosAsendente();
+					Test.imprimirProductos();
 					Test.Cerrar_Pagina();
 				} else {
 					Test.salir();

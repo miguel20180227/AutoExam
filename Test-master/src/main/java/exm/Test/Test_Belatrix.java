@@ -4,8 +4,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.swing.text.View;
 
@@ -15,6 +18,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
 import Data.AdminProperties;
+import Data.CompararObjetos;
+import Data.Productos;
 import Framework.Cls_Cross_Browsing;
 import Framework.Cls_Encontrar_Elemento;
 
@@ -105,7 +110,9 @@ public class Test_Belatrix {
 				str_Price_2 = "0";
 			System.out.println("The price 2 is: " + str_Price_2);
 			String str_Price_3 = actions.GetTextByXpath(Obj_Driver, str_Shoes_3);
-			str_Price_3 = str_Price_3.substring(15);
+			if (str_Price_3.length()>15) {
+				str_Price_3 = str_Price_3.substring(14);
+			}
 			str_Price_3 = str_Price_3.replace("COP $", "").replace("a", "").replace(" ", "");
 			if (str_Price_3.equals(""))
 				str_Price_3 = "0";
@@ -135,14 +142,15 @@ public class Test_Belatrix {
 			System.out.println(Str_Error);
 		}
 	}
+
 	@Test
 	public void assertPrecios() {
 		try {
-		assertTrue(dbl_Price_1 < dbl_Price_2);
-		assertTrue(dbl_Price_2 < dbl_Price_3);
-		assertFalse(dbl_Price_3 < dbl_Price_4);
-		assertTrue(dbl_Price_4 < dbl_Price_5);
-		System.out.println("Test Passed");  
+			assertFalse(dbl_Price_1 < dbl_Price_2);
+			assertTrue(dbl_Price_2 < dbl_Price_3);
+			assertFalse(dbl_Price_3 < dbl_Price_4);
+			assertFalse(dbl_Price_4 < dbl_Price_5);
+			System.out.println("Test Passed");
 		} catch (Exception Obj_Excepcion) {
 			Obj_Excepcion.printStackTrace();
 			Str_Error = "Error (00010): Error en Assert, " + Obj_Excepcion.getMessage();
@@ -150,51 +158,96 @@ public class Test_Belatrix {
 		}
 	}
 
-	public void imprimirProductosAsendente() {
-		String nombre1 = actions.GetTextByXpath(Obj_Driver,str_Txt_Nombre1);
-		String nombre2 = actions.GetTextByXpath(Obj_Driver,str_Txt_Nombre2);
-		String nombre3 = actions.GetTextByXpath(Obj_Driver,str_Txt_Nombre3);
-		String nombre4 = actions.GetTextByXpath(Obj_Driver,str_Txt_Nombre4);
-		String nombre5 = actions.GetTextByXpath(Obj_Driver,str_Txt_Nombre5);
-		
-		System.out.println("Nombre 1: "+nombre1);
-		System.out.println("Nombre 2: "+nombre2);
-		System.out.println("Nombre 3: "+nombre3);
-		System.out.println("Nombre 4: "+nombre4);
-		System.out.println("Nombre 5: "+nombre5);
-		
-		ArrayList<String> stud = new ArrayList<>();
-        ArrayList<Double> uspe = new ArrayList<>();
-        stud.add(nombre1);
-        stud.add(nombre2);
-        stud.add(nombre3);
-        stud.add(nombre4);
-        stud.add(nombre5);
-        uspe.add(4.5);
-        uspe.add(6.3);
-        uspe.add(3.8);
-        uspe.add(5.5);
-        uspe.add(4.7);
+	public void imprimirProductos() {
+		String nombre1 = actions.GetTextByXpath(Obj_Driver, str_Txt_Nombre1);
+		String nombre2 = actions.GetTextByXpath(Obj_Driver, str_Txt_Nombre2);
+		String nombre3 = actions.GetTextByXpath(Obj_Driver, str_Txt_Nombre3);
+		String nombre4 = actions.GetTextByXpath(Obj_Driver, str_Txt_Nombre4);
+		String nombre5 = actions.GetTextByXpath(Obj_Driver, str_Txt_Nombre5);
 
-        Collections.sort(stud);
-        for(String temp: stud){
-            System.out.println(temp);
-        }		
-	}
+		System.out.println("Nombre 1: " + nombre1);
+		System.out.println("Nombre 2: " + nombre2);
+		System.out.println("Nombre 3: " + nombre3);
+		System.out.println("Nombre 4: " + nombre4);
+		System.out.println("Nombre 5: " + nombre5);
+
+		ArrayList<String> nombreProductos = new ArrayList<>();
+		ArrayList<Double> precios = new ArrayList<>();
+		nombreProductos.add(nombre1);
+		nombreProductos.add(nombre2);
+		nombreProductos.add(nombre3);
+		nombreProductos.add(nombre4);
+		nombreProductos.add(nombre5);
+		precios.add(dbl_Price_1);
+		precios.add(dbl_Price_2);
+		precios.add(dbl_Price_3);
+		precios.add(dbl_Price_4);
+		precios.add(dbl_Price_5);
+		System.out.println("*** *** PRODUCTOS EN ORDEN ASCENDENTE *** ***");
+		Collections.sort(nombreProductos);
+		for (String temp : nombreProductos) {
+			System.out.println(temp);
+		}
+		System.out.println("*** *** PRECIOS EN ORDEN DESCENDENTE *** ***");
+		Collections.reverse(precios);
+		for (Double temp : precios) {
+			System.out.println(temp);
+		}
+
+//		Productos producto1 = new Productos(nombre1, dbl_Price_1);
+//		Productos producto2 = new Productos(nombre2, dbl_Price_2);
+//		Productos producto3 = new Productos(nombre3, dbl_Price_3);
+//		Productos producto4 = new Productos(nombre4, dbl_Price_4);
+//		Productos producto5 = new Productos(nombre5, dbl_Price_5);
+
+		List<Productos> productos = new ArrayList<>(Arrays.asList(new Productos(nombre1, dbl_Price_1),
+				new Productos(nombre2, dbl_Price_2), new Productos(nombre3, dbl_Price_3),
+				new Productos(nombre4, dbl_Price_4), new Productos(nombre5, dbl_Price_5)));
+
+		Comparator<Productos> comparador = new Comparator<Productos>() {
+			public int compare(Productos a, Productos b) {
+				int resultado = Double.compare(a.getPrecio(), b.getPrecio());
+				if (resultado != 0) {
+					return resultado;
+				}
+
+				// resultado = comparaPrioridad( a.prioridad(), b.prioridad() );
+				// if ( resultado != 0 ) { return resultado; }
+
+				resultado = a.getNombre().compareTo(b.getNombre());
+				if (resultado != 0) {
+					return resultado;
+				}
+				return resultado;
+			}
+		};
 	
-	private static ArrayList<String> sortA(ArrayList<String> st, ArrayList<Double> us) {
-        ArrayList<String> list = new ArrayList<>();
-        String s;
-        for (int i = 0; i < st.size(); i++) {
-            s = st.get(i) + ": " + us.get(i);
-            list.add(s);
+	
+		System.out.printf("Antes: %s%n\n", productos);
+		Collections.sort(productos, comparador);
+		System.out.printf("Despues: %s%n\n", productos);
+		
+		Collections.sort(productos,new CompararObjetos());
+        
+        for(Productos aux: productos){
+            System.out.println(aux);
         }
-        HashSet<String> set = new HashSet<>(list);
-        list.clear();
-        list.addAll(set);
-        return list;
-    }
-	
+		
+	}
+
+//	private static ArrayList<String> sortA(ArrayList<String> st, ArrayList<Double> us) {
+//		ArrayList<String> list = new ArrayList<>();
+//		String s;
+//		for (int i = 0; i < st.size(); i++) {
+//			s = st.get(i) + ": " + us.get(i);
+//			list.add(s);
+//		}
+//		HashSet<String> set = new HashSet<>(list);
+//		list.clear();
+//		list.addAll(set);
+//		return list;
+//	}
+
 	public void Cerrar_Pagina() {
 		try {
 			Obj_Driver.quit();
