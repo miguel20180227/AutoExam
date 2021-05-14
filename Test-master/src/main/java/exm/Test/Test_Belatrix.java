@@ -1,27 +1,17 @@
 package exm.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-
-import javax.swing.text.View;
-
-import org.hamcrest.core.IsEqual;
-import org.junit.Test;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-
 import Data.AdminProperties;
 import Data.CompararObjetos;
 import Data.Productos;
 import Framework.Cls_Cross_Browsing;
 import Framework.Cls_Encontrar_Elemento;
+import org.junit.Test;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+
+import java.util.*;
+
+import static org.junit.Assert.assertFalse;
 
 public class Test_Belatrix {
 
@@ -147,7 +137,7 @@ public class Test_Belatrix {
 	public void assertPrecios() {
 		try {
 			assertFalse(dbl_Price_1 < dbl_Price_2);
-			assertTrue(dbl_Price_2 < dbl_Price_3);
+			assertFalse(dbl_Price_2 < dbl_Price_3);
 			assertFalse(dbl_Price_3 < dbl_Price_4);
 			assertFalse(dbl_Price_4 < dbl_Price_5);
 			System.out.println("Test Passed");
